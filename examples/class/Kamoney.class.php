@@ -9,7 +9,7 @@ class Kamoney
     {
         $headers = ['Content-Type: application/json'];
         $url = self::$api . "/public" . $endpoint;
-
+        
         $ch = curl_init();
 
         if ($type == 'POST') {
@@ -17,7 +17,8 @@ class Kamoney
             curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
             curl_setopt($ch, CURLOPT_POST, 1);
         } else {
-            curl_setopt($ch, CURLOPT_URL, $url . '?' . $data_query);
+            $data_query = http_build_query(self::query_mounted($data), '', '&');
+            curl_setopt($ch, CURLOPT_URL, $url . (count($data) > 0 ? '?' . $data_query : ''));
             curl_setopt($ch, CURLOPT_POST, 0);
         }
 
